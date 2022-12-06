@@ -45,6 +45,8 @@ const persons = {
         lng: 2.22916,
       },
       marker: null,
+      lines: [],
+      lineColor: 'red',
     },
     {
       name: 'Thomas',
@@ -54,6 +56,8 @@ const persons = {
         lng: 2.23362,
       },
       marker: null,
+      lines: [],
+      lineColor: 'blue',
     },
     {
       name: 'William',
@@ -63,6 +67,8 @@ const persons = {
         lng: 2.23982,
       },
       marker: null,
+      lines: [],
+      lineColor: 'green',
     },
   ],
 };
@@ -112,21 +118,22 @@ printRestaurants();
 
 const mapInformationsHtml = document.querySelector('#map__informations');
 function printMapInformations(data) {
-  mapInformationsHtml.innerHTML = `miam à ${
-    lunchTime
-      .toLocaleDateString('fr-fr', {
-        hour: 'numeric',
-        minute: 'numeric',
-      })
-      .split(' ')[1]
-  } : ${data.name} doit partir à ${
-    data.timeOut
-      .toLocaleDateString('fr-fr', {
-        hour: 'numeric',
-        minute: 'numeric',
-      })
-      .split(' ')[1]
-  }`;
+  mapInformationsHtml.innerHTML = `miam -> ${lunchTime.toLocaleDateString(
+    'fr-fr',
+    {
+      day: 'numeric',
+      year: 'numeric',
+      month: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+    }
+  )} : ${data.name} doit partir -> ${data.timeOut.toLocaleDateString('fr-fr', {
+    day: 'numeric',
+    year: 'numeric',
+    month: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+  })}`;
 }
 
 // GET DISTANCE (en Km)
@@ -147,6 +154,23 @@ function getDistance(A, B) {
 
 function getTrajectDistance(person) {
   const restaurant = restaurants[person.restaurant];
+
+  person.lines.forEach((line) => {
+    line.remove();
+  });
+
+  person.lines = [];
+
+  person.lines.push(
+    L.polyline([person.position, restaurant], {
+      color: person.lineColor,
+    }).addTo(map)
+  );
+
+  person.lines.push(
+    L.polyline([restaurant, arrival], { color: person.lineColor }).addTo(map)
+  );
+
   return (
     getDistance(person.position, restaurant) + getDistance(restaurant, arrival)
   );
@@ -207,7 +231,7 @@ function initMap() {
   arrival.marker.on('drag', function () {
     arrival.lat = arrival.marker._latlng.lat;
     arrival.lng = arrival.marker._latlng.lng;
-    printMapInformations(getAllInformationsToLunch()[0]);
+    printMapInformations(getAllInformationsToLunch()[1]);
   });
 }
 
@@ -224,7 +248,7 @@ initLoginPopUp();
 window.onload = function () {
   initMap();
 
-  printMapInformations(getAllInformationsToLunch()[0]);
+  printMapInformations(getAllInformationsToLunch()[1]);
 
   //console.log(getDistance(persons.list[0].position, restaurants[0]));
   //console.log(getDistance(persons.list[0].position, arrival.marker._latlng));
