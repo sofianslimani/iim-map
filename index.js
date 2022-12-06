@@ -45,6 +45,8 @@ const persons = {
         lng: 2.22916,
       },
       marker: null,
+      lines: [],
+      lineColor: 'red',
     },
     {
       name: 'Thomas',
@@ -54,6 +56,8 @@ const persons = {
         lng: 2.23362,
       },
       marker: null,
+      lines: [],
+      lineColor: 'blue',
     },
     {
       name: 'William',
@@ -63,6 +67,8 @@ const persons = {
         lng: 2.23982,
       },
       marker: null,
+      lines: [],
+      lineColor: 'green',
     },
   ],
 };
@@ -147,6 +153,23 @@ function getDistance(A, B) {
 
 function getTrajectDistance(person) {
   const restaurant = restaurants[person.restaurant];
+
+  person.lines.forEach((line) => {
+    line.remove();
+  });
+
+  person.lines = [];
+
+  person.lines.push(
+    L.polyline([person.position, restaurant], {
+      color: person.lineColor,
+    }).addTo(map)
+  );
+
+  person.lines.push(
+    L.polyline([restaurant, arrival], { color: person.lineColor }).addTo(map)
+  );
+
   return (
     getDistance(person.position, restaurant) + getDistance(restaurant, arrival)
   );
@@ -207,14 +230,14 @@ function initMap() {
   arrival.marker.on('drag', function () {
     arrival.lat = arrival.marker._latlng.lat;
     arrival.lng = arrival.marker._latlng.lng;
-    printMapInformations(getAllInformationsToLunch()[0]);
+    printMapInformations(getAllInformationsToLunch()[1]);
   });
 }
 
 window.onload = function () {
   initMap();
 
-  printMapInformations(getAllInformationsToLunch()[0]);
+  printMapInformations(getAllInformationsToLunch()[1]);
 
   //console.log(getDistance(persons.list[0].position, restaurants[0]));
   //console.log(getDistance(persons.list[0].position, arrival.marker._latlng));
