@@ -9,18 +9,73 @@
       integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
       crossorigin=""
     />
-    <style type="text/css">
-      #map {
-        /* la carte DOIT avoir une hauteur sinon elle n'apparaît pas */
-        height: 400px;
-        width: 50%;
-        margin: auto;
-      }
-    </style>
-    <title>Carte</title>
+    <link rel="stylesheet" href="style.css" />
+    <title>Miam Map</title>
   </head>
   <body>
-    <div id="map"></div>
+    <div class="container">
+      <div class="restaurants">
+        <div class="restaurants__title">
+          <h2>Restaurants</h2>
+        </div>
+        <ul class="restaurants__list">
+          <li class="restaurants__list__item">
+            <div class="restaurants__list__item__image">
+              <img
+                src="https://media-cdn.tripadvisor.com/media/photo-s/05/cf/59/60/kfc-jaux.jpg"
+                alt=""
+              />
+            </div>
+
+            <div class="restaurants__list__item__content">
+              <div class="restaurants__list__item__name">
+                <h3>Restaurant 1</h3>
+              </div>
+              <div class="restaurants__list__item__address">Address 1</div>
+              <div class="restaurants__list__item__phone">Phone 1</div>
+              <div class="restaurants__list__item__website">Website 1</div>
+            </div>
+          </li>
+          <li class="restaurants__list__item">
+            <div class="restaurants__list__item__image">
+              <img
+                src="https://static.observatoiredelafranchise.fr/images/ckfinder/images/2020/07/17/burger-king-ext-live-7bc2e3.png"
+                alt=""
+              />
+            </div>
+
+            <div class="restaurants__list__item__content">
+              <div class="restaurants__list__item__name">
+                <h3>Restaurant 2</h3>
+              </div>
+              <div class="restaurants__list__item__address">Address 2</div>
+              <div class="restaurants__list__item__phone">Phone 2</div>
+              <div class="restaurants__list__item__website">Website 2</div>
+            </div>
+          </li>
+
+          <li class="restaurants__list__item">
+            <div class="restaurants__list__item__image">
+              <img
+                src="https://media.mcdonalds.fr/media/d5/28/8d/d5288d1b71c580c24bd5da511c2656251640d1ec?auto=webp"
+                alt=""
+              />
+            </div>
+            <div class="restaurants__list__item__content">
+              <div class="restaurants__list__item__name">
+                <h3>Restaurant 3</h3>
+              </div>
+              <div class="restaurants__list__item__address">Address 3</div>
+              <div class="restaurants__list__item__phone">Phone 3</div>
+              <div class="restaurants__list__item__website">Website 3</div>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div id="map"></div>
+
+      <div class="room">room</div>
+    </div>
 
     <!-- Fichiers Javascript -->
     <script
