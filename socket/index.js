@@ -10,25 +10,12 @@ const io = socketIo(server, {
     origin: '*',
   },
 });
+const port = process.env.PORT || 3000;
 
-app.get('/', (req, res) => {
-  console.log('server default res');
-  res.send('<h1>oklm</h1>');
-});
-
-server.listen(3000, () => {
-  console.log('run in 3000');
+server.listen(port, () => {
+  console.log(`Socket.IO server running at http://localhost:${port}/`);
 });
 
 io.on('connection', (socket) => {
-  console.log('user co ' + socket.id);
-  socket.on('msg', (msg) => {
-    console.log(msg);
-    msg = socket.id + ' : ' + msg;
-    io.emit('msg', msg);
-  });
-
-  socket.on('disconnect', () => {
-    console.log('user disco');
-  });
+  console.log('connexion');
 });

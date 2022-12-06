@@ -9,11 +9,37 @@
       integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
       crossorigin=""
     />
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="public/style.css" />
     <title>Miam Map</title>
   </head>
   <body>
+    
     <div class="container">
+
+      <div id="login" class="login">
+        <div class="login__title">
+          <h2>Connexion</h2>
+        </div>
+        <form action=""class="login__form">
+            <label for="name">Nom</label>
+            <input type="text" id="name" />
+            <label for="login__restaurant">Choisis ton restaurant</label>
+
+            <select id="login__restaurant" >
+            </select>
+            <label for="lat">Latitude</label>
+            <input type="text" id="lat" />
+            <label for="long">Longitude</label>
+            <input type="text" id="long" />
+            <button type="submit">Connexion</button>
+        </form>
+
+       
+      </div>
+
+      <div class="overlay"></div>
+
+
       <div class="restaurants">
         <div class="restaurants__title">
           <h2>Restaurants</h2>
@@ -40,11 +66,15 @@
     </div>
 
     <!-- Fichiers Javascript -->
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
     <script
       src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js"
       integrity="sha51é2-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw=="
       crossorigin=""
     ></script>
     <script src="index.js"></script>
+    <script src="http://localhost:3000/socket.io/socket.io.js"></script>
+    <script src="socket/client.js"></script>
+    
   </body>
 </html>

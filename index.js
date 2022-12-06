@@ -211,6 +211,16 @@ function initMap() {
   });
 }
 
+const loginSelectRestaurant = document.querySelector('#login__restaurant');
+
+function initLoginPopUp() {
+  restaurants.forEach((restaurant, index) => {
+    loginSelectRestaurant.innerHTML += `<option value="${index}">${restaurant.name}</option>`;
+  });
+}
+
+initLoginPopUp();
+
 window.onload = function () {
   initMap();
 
