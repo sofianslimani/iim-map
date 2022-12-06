@@ -118,21 +118,22 @@ printRestaurants();
 
 const mapInformationsHtml = document.querySelector('#map__informations');
 function printMapInformations(data) {
-  mapInformationsHtml.innerHTML = `miam à ${
-    lunchTime
-      .toLocaleDateString('fr-fr', {
-        hour: 'numeric',
-        minute: 'numeric',
-      })
-      .split(' ')[1]
-  } : ${data.name} doit partir à ${
-    data.timeOut
-      .toLocaleDateString('fr-fr', {
-        hour: 'numeric',
-        minute: 'numeric',
-      })
-      .split(' ')[1]
-  }`;
+  mapInformationsHtml.innerHTML = `miam -> ${lunchTime.toLocaleDateString(
+    'fr-fr',
+    {
+      day: 'numeric',
+      year: 'numeric',
+      month: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+    }
+  )} : ${data.name} doit partir -> ${data.timeOut.toLocaleDateString('fr-fr', {
+    day: 'numeric',
+    year: 'numeric',
+    month: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+  })}`;
 }
 
 // GET DISTANCE (en Km)
