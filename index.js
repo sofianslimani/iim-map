@@ -2,6 +2,8 @@ const lat = 48.89347;
 const lon = 2.232;
 let map = null;
 
+let lunchTime = new Date(new Date().setHours(13, 0, 0));
+
 const restaurants = [
   {
     lat: 48.89676,
@@ -55,7 +57,7 @@ const persons = {
     },
     {
       name: 'William',
-      restaurants: 1,
+      restaurant: 1,
       position: {
         lat: 48.89255,
         lng: 2.23982,
@@ -65,7 +67,7 @@ const persons = {
   ],
 };
 
-const arrival = {
+let arrival = {
   lat: 48.89351,
   lng: 2.22698,
   marker: null,
@@ -82,10 +84,8 @@ const arrival = {
   },
 };
 
-const miam = 13;
-
 const restaurantListHtml = document.querySelector('.restaurants__list');
-function PrintRestaurants() {
+function printRestaurants() {
   restaurantListHtml.innerHTML = '';
   restaurants.forEach((restaurant) => {
     restaurantListHtml.innerHTML += `<li class="restaurants__list__item">
@@ -108,9 +108,28 @@ function PrintRestaurants() {
   });
 }
 
-PrintRestaurants();
+printRestaurants();
 
-// GET DISTANCE
+const mapInformationsHtml = document.querySelector('#map__informations');
+function printMapInformations(data) {
+  mapInformationsHtml.innerHTML = `miam à ${
+    lunchTime
+      .toLocaleDateString('fr-fr', {
+        hour: 'numeric',
+        minute: 'numeric',
+      })
+      .split(' ')[1]
+  } : ${data.name} doit partir à ${
+    data.timeOut
+      .toLocaleDateString('fr-fr', {
+        hour: 'numeric',
+        minute: 'numeric',
+      })
+      .split(' ')[1]
+  }`;
+}
+
+// GET DISTANCE (en Km)
 function getDistance(A, B) {
   const R = 6371e3;
   const φ1 = (A.lat * Math.PI) / 180;
@@ -123,10 +142,36 @@ function getDistance(A, B) {
     Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
-  return R * c;
+  return (R * c) / 1000;
 }
 
-function getTrajectTime(person) {}
+function getTrajectDistance(person) {
+  const restaurant = restaurants[person.restaurant];
+  return (
+    getDistance(person.position, restaurant) + getDistance(restaurant, arrival)
+  );
+}
+
+function getTrajectTime(person) {
+  return getTrajectDistance(person) / persons.speed;
+}
+
+// GET ALL TIMEOUT
+function getAllInformationsToLunch() {
+  const timesOut = [];
+  persons.list.forEach((person) => {
+    timesOut.push({
+      name: person.name,
+      distance: getTrajectDistance(person),
+      time: getTrajectTime(person),
+      timeOut: new Date(
+        lunchTime.getTime() - 1000 * (60 * (getTrajectTime(person) * 100))
+      ),
+    });
+  });
+
+  return timesOut;
+}
 
 // INIT MAP
 function initMap() {
@@ -160,12 +205,16 @@ function initMap() {
 
   // ON DRAG ARRIVAL MARKER
   arrival.marker.on('drag', function () {
-    // console.log(getDistance(persons.list[0].position, arrival.marker._latlng));
+    arrival.lat = arrival.marker._latlng.lat;
+    arrival.lng = arrival.marker._latlng.lng;
+    printMapInformations(getAllInformationsToLunch()[0]);
   });
 }
 
 window.onload = function () {
   initMap();
+
+  printMapInformations(getAllInformationsToLunch()[0]);
 
   //console.log(getDistance(persons.list[0].position, restaurants[0]));
   //console.log(getDistance(persons.list[0].position, arrival.marker._latlng));
