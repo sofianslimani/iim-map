@@ -275,7 +275,7 @@ body {
   width: 100%;
 }
 
-#login_position {
+#login__position {
   background-color: black;
   color: white;
   padding: 10px;
@@ -284,7 +284,7 @@ body {
   border-radius: 5px;
 }
 
-#login_position:hover {
+#login__position:hover {
   background-color: rgb(38, 38, 38);
   cursor: pointer;
   text-align: center;

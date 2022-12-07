@@ -4,6 +4,8 @@ let map = null;
 
 let lunchTime = new Date(new Date().setHours(13, 0, 0));
 
+const loginCoordsHtml = document.querySelector('#login__coords');
+
 const restaurants = [
   {
     lat: 48.89676,
@@ -136,6 +138,17 @@ function printMapInformations(data) {
   })}`;
 }
 
+function addUser(user) {
+  persons.list.push({
+    name: user.name,
+    restaurant: user.restaurant,
+    position: user.position,
+    marker: null,
+    lines: [],
+    lineColor: 'blue',
+  });
+}
+
 // GET DISTANCE (en Km)
 function getDistance(A, B) {
   const R = 6371e3;
@@ -235,8 +248,10 @@ function initMap() {
   });
 
   map.on('click', function (e) {
-    if (chooseMapPosition) toggleMapFullScreen(false);
-    // console.log('Lat, Lon : ' + e.latlng.lat + ', ' + e.latlng.lng);
+    if (chooseMapPosition) {
+      toggleMapFullScreen(false);
+      loginCoordsHtml.value = `${e.latlng.lat};${e.latlng.lng}`;
+    }
   });
 }
 
