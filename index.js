@@ -4,6 +4,8 @@ let map = null;
 
 let lunchTime = new Date(new Date().setHours(13, 0, 0));
 
+let selectedUserIndex = 0;
+
 const loginCoordsHtml = document.querySelector('#login__coords');
 
 const restaurants = [
@@ -30,16 +32,16 @@ const restaurants = [
   },
 ];
 
-const persons = {
+const users = {
   speed: 5,
   icon: {
-    iconUrl: 'img/person.png',
+    iconUrl: 'img/user.png',
     iconSize: [40, 50],
     iconAnchor: [25, 50],
     popupAnchor: [-3, -76],
   },
   list: [
-    {
+    /* {
       name: 'Sofian',
       restaurant: 0,
       position: {
@@ -71,7 +73,7 @@ const persons = {
       marker: null,
       lines: [],
       lineColor: 'green',
-    },
+    }, */
   ],
 };
 
@@ -118,8 +120,22 @@ function printRestaurants() {
 
 printRestaurants();
 
+const usersListHtml = document.querySelector('.users__list');
+function printUsers() {
+  usersListHtml.innerHTML = '';
+  users.list.forEach((user, index) => {
+    usersListHtml.innerHTML += `<li class="users__list__item" onClick="printMapInformations(getAllInformationsToLunch()[${index}]);">
+      ${user.name}
+    </li>`;
+  });
+}
+
+printUsers();
+
 const mapInformationsHtml = document.querySelector('#map__informations');
-function printMapInformations(data) {
+function printMapInformations(data, index = -1) {
+  if (index !== -1) selectedUserIndex = index;
+
   mapInformationsHtml.innerHTML = `miam -> ${lunchTime.toLocaleDateString(
     'fr-fr',
     {
@@ -138,8 +154,9 @@ function printMapInformations(data) {
   })}`;
 }
 
+// ADD USER
 function addUser(user) {
-  persons.list.push({
+  users.list.push({
     name: user.name,
     restaurant: user.restaurant,
     position: user.position,
@@ -147,6 +164,35 @@ function addUser(user) {
     lines: [],
     lineColor: 'blue',
   });
+
+  createMarker({
+    position: user.position,
+    iconOptions: { icon: L.icon(users.icon) },
+    name: user.name,
+  });
+
+  getTrajectDistance(users.list[users.list.length - 1]);
+  if (users.list.length === 1)
+    printMapInformations(getAllInformationsToLunch()[0]);
+  printUsers();
+}
+
+function updateUsersTraject() {
+  users.list.forEach((user) => {
+    getTrajectDistance(user);
+  });
+}
+
+// ADD MARKER
+function createMarker(data) {
+  const marker = L.marker(
+    [data.position.lat, data.position.lng],
+    data.iconOptions
+  ).addTo(map);
+
+  marker.bindPopup(data.name);
+
+  return marker;
 }
 
 // GET DISTANCE (en Km)
@@ -165,44 +211,44 @@ function getDistance(A, B) {
   return (R * c) / 1000;
 }
 
-function getTrajectDistance(person) {
-  const restaurant = restaurants[person.restaurant];
+function getTrajectDistance(user) {
+  const restaurant = restaurants[user.restaurant];
 
-  person.lines.forEach((line) => {
+  user.lines.forEach((line) => {
     line.remove();
   });
 
-  person.lines = [];
+  user.lines = [];
 
-  person.lines.push(
-    L.polyline([person.position, restaurant], {
-      color: person.lineColor,
+  user.lines.push(
+    L.polyline([user.position, restaurant], {
+      color: user.lineColor,
     }).addTo(map)
   );
 
-  person.lines.push(
-    L.polyline([restaurant, arrival], { color: person.lineColor }).addTo(map)
+  user.lines.push(
+    L.polyline([restaurant, arrival], { color: user.lineColor }).addTo(map)
   );
 
   return (
-    getDistance(person.position, restaurant) + getDistance(restaurant, arrival)
+    getDistance(user.position, restaurant) + getDistance(restaurant, arrival)
   );
 }
 
-function getTrajectTime(person) {
-  return getTrajectDistance(person) / persons.speed;
+function getTrajectTime(user) {
+  return getTrajectDistance(user) / users.speed;
 }
 
 // GET ALL TIMEOUT
 function getAllInformationsToLunch() {
   const timesOut = [];
-  persons.list.forEach((person) => {
+  users.list.forEach((user) => {
     timesOut.push({
-      name: person.name,
-      distance: getTrajectDistance(person),
-      time: getTrajectTime(person),
+      name: user.name,
+      distance: getTrajectDistance(user),
+      time: getTrajectTime(user),
       timeOut: new Date(
-        lunchTime.getTime() - 1000 * (60 * (getTrajectTime(person) * 100))
+        lunchTime.getTime() - 1000 * (60 * (getTrajectTime(user) * 100))
       ),
     });
   });
@@ -220,34 +266,45 @@ function initMap() {
   }).addTo(map);
 
   Object.values(restaurants).forEach((restaurant) => {
-    restaurant.marker = L.marker([restaurant.lat, restaurant.lng]).addTo(map);
-
-    restaurant.marker.bindPopup(restaurant.name);
+    restaurant.marker = createMarker({
+      position: {
+        lat: restaurant.lat,
+        lng: restaurant.lng,
+      },
+      name: restaurant.name,
+    });
   });
 
-  persons.list.forEach((person) => {
-    person.marker = L.marker([person.position.lat, person.position.lng], {
-      icon: L.icon(persons.icon),
-    }).addTo(map);
-
-    person.marker.bindPopup(person.name);
+  users.list.forEach((user) => {
+    user.marker = createMarker({
+      position: user.position,
+      iconOptions: { icon: L.icon(users.icon) },
+      name: user.name,
+    });
   });
 
-  arrival.iconOptions.icon = L.icon(arrival.iconOptions.icon);
-  arrival.marker = L.marker(
-    [arrival.lat, arrival.lng],
-    arrival.iconOptions
-  ).addTo(map);
-  arrival.marker.bindPopup(arrival.name);
+  arrival.marker = createMarker({
+    position: {
+      lat: arrival.lat,
+      lng: arrival.lng,
+    },
+    iconOptions: {
+      ...arrival.iconOptions,
+      icon: L.icon(arrival.iconOptions.icon),
+    },
+    name: arrival.name,
+  });
 
   // ON DRAG ARRIVAL MARKER
-  arrival.marker.on('drag', function () {
+  arrival.marker.on('drag', () => {
     arrival.lat = arrival.marker._latlng.lat;
     arrival.lng = arrival.marker._latlng.lng;
-    printMapInformations(getAllInformationsToLunch()[1]);
+    updateUsersTraject();
+    if (selectedUserIndex !== -1)
+      printMapInformations(getAllInformationsToLunch()[selectedUserIndex]);
   });
 
-  map.on('click', function (e) {
+  map.on('click', (e) => {
     if (chooseMapPosition) {
       toggleMapFullScreen(false);
       loginCoordsHtml.value = `${e.latlng.lat};${e.latlng.lng}`;
@@ -267,15 +324,20 @@ let chooseMapPosition = false;
 
 const mapHtml = document.querySelector('#map');
 function toggleMapFullScreen(toggle = true) {
+  arrival.marker.dragging._draggable._enabled = !toggle;
   chooseMapPosition = toggle;
+  map.invalidateSize();
   mapHtml.classList.toggle('fullscreen', toggle);
+}
+
+const loginPopupHtml = document.querySelector('#login');
+const overlayHtml = document.querySelector('.overlay');
+function toggleLoginPopup(toggle) {
+  console.log(toggle ? 'block' : 'none');
+  loginPopupHtml.style.display = toggle ? 'block' : 'none';
+  overlayHtml.style.display = toggle ? 'block' : 'none';
 }
 
 window.onload = function () {
   initMap();
-
-  printMapInformations(getAllInformationsToLunch()[1]);
-
-  //console.log(getDistance(persons.list[0].position, restaurants[0]));
-  //console.log(getDistance(persons.list[0].position, arrival.marker._latlng));
 };
