@@ -233,17 +233,28 @@ function initMap() {
     arrival.lng = arrival.marker._latlng.lng;
     printMapInformations(getAllInformationsToLunch()[1]);
   });
+
+  map.on('click', function (e) {
+    if (chooseMapPosition) toggleMapFullScreen(false);
+    // console.log('Lat, Lon : ' + e.latlng.lat + ', ' + e.latlng.lng);
+  });
 }
 
 const loginSelectRestaurant = document.querySelector('#login__restaurant');
-
-function initLoginPopUp() {
+function initLoginPopup() {
   restaurants.forEach((restaurant, index) => {
     loginSelectRestaurant.innerHTML += `<option value="${index}">${restaurant.name}</option>`;
   });
 }
 
-initLoginPopUp();
+initLoginPopup();
+let chooseMapPosition = false;
+
+const mapHtml = document.querySelector('#map');
+function toggleMapFullScreen(toggle = true) {
+  chooseMapPosition = toggle;
+  mapHtml.classList.toggle('fullscreen', toggle);
+}
 
 window.onload = function () {
   initMap();

@@ -236,6 +236,11 @@ body {
   position: relative;
 }
 
+#map.fullscreen {
+  position: absolute;
+  z-index: 9999;
+}
+
 #map__informations {
   position: absolute;
   z-index: 9997;
@@ -248,7 +253,7 @@ body {
 
 #map__legend {
   position: absolute;
-  z-index: 9999;
+  z-index: 9997;
   bottom: 0;
   left: 0;
   width: 30%;
@@ -268,4 +273,19 @@ body {
 
 #map__legend img {
   width: 100%;
+}
+
+#login_position {
+  background-color: black;
+  color: white;
+  padding: 10px;
+  margin-bottom: 10px;
+  text-align: center;
+  border-radius: 5px;
+}
+
+#login_position:hover {
+  background-color: rgb(38, 38, 38);
+  cursor: pointer;
+  text-align: center;
 }
