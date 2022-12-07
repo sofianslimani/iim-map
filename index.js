@@ -338,6 +338,11 @@ function toggleLoginPopup(toggle) {
   overlayHtml.style.display = toggle ? 'block' : 'none';
 }
 
+const messageBoxHtml = document.querySelector('#messages__box');
+function addMessage(message) {
+  messageBoxHtml.innerHTML += `<li>${message}</li>`;
+}
+
 window.onload = function () {
   initMap();
 };
