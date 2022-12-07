@@ -84,7 +84,7 @@ body {
 
 .restaurants,
 .room {
-  width: 36%;
+  width: 30%;
   background-color: #fff;
   padding: 12px 6px;
   box-sizing: border-box;
@@ -94,7 +94,8 @@ body {
   border-right: 1px solid #ccc;
 }
 
-.restaurants__title {
+.restaurants__title,
+.room__title {
   font-size: 1.1em;
   margin-bottom: 12px;
   text-align: center;
