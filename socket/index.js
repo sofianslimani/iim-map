@@ -18,4 +18,8 @@ server.listen(port, () => {
 
 io.on('connection', (socket) => {
   console.log('connexion');
+
+  socket.on('login', (users) => {
+    console.log('login', users);
+  });
 });
