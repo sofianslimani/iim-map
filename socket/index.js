@@ -17,9 +17,11 @@ server.listen(port, () => {
 });
 
 io.on('connection', (socket) => {
-  console.log('connexion');
+  socket.on('login', (user) => {
+    socket.broadcast.emit('addUser', user);
+  });
 
-  socket.on('login', (users) => {
-    console.log('login', users);
+  socket.on('chat', (message) => {
+    socket.broadcast.emit('sendMessage', message);
   });
 });
