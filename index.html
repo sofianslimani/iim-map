@@ -12,28 +12,25 @@
     <title>Miam Map</title>
   </head>
   <body>
-    
     <div class="container">
-
       <div id="login" class="login">
         <div class="login__title">
           <h2>Connexion</h2>
         </div>
         <form action="" id="loginform" class="login__form">
-            <label for="name">Nom</label>
-            <input type="text" id="name" />
-            <label for="login__restaurant">Choisis ton restaurant</label>
-            <select id="login__restaurant"></select>
-            <input id="login__coords"type="hidden" value="">
-            <p id="login__position" onclick="toggleMapFullScreen(true)">Placer son repère</p>
-            <button type="submit">Connexion</button>
+          <label for="name">Nom</label>
+          <input type="text" id="name" />
+          <label for="login__restaurant">Choisis ton restaurant</label>
+          <select id="login__restaurant"></select>
+          <input id="login__coords" type="hidden" value="" />
+          <p id="login__position" onclick="toggleMapFullScreen(true)">
+            Placer son repère
+          </p>
+          <button type="submit">Connexion</button>
         </form>
-
-       
       </div>
 
       <div class="overlay"></div>
-
 
       <div class="restaurants">
         <div class="restaurants__title">
@@ -41,7 +38,11 @@
         </div>
         <ul class="restaurants__list"></ul>
       </div>
+
       <div id="map">
+        <div class="map__error">
+          <p>Cette commande n'est pas valide</p>
+        </div>
         <p id="map__informations"></p>
         <div id="map__legend">
           <div>
@@ -62,22 +63,28 @@
       <div class="room">
         <div class="room__title">
           <h2>Room</h2>
-          <ul class="users__list"></ul>
-        </div>
-          <div class="room__chat__container">
-            <ul id="messages__box"></ul>
-            <form id="form__message" action="">
-              <input id="chat__message" autocomplete="off" />
-              <button type="submit" id="chat__submit">Envoyer</button>
-            </form>
-          </div>
         </div>
 
+        <div class="room__users__container">
+          <ul class="users__list"></ul>
+        </div>
+
+        <div class="room__chat__container">
+          <form id="form__message" action="">
+            <input id="chat__message" autocomplete="off" />
+            <button type="submit" id="chat__submit">Envoyer</button>
+          </form>
+          <ul id="messages__box"></ul>
+        </div>
       </div>
     </div>
 
     <!-- Fichiers Javascript -->
-    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+    <script
+      src="https://code.jquery.com/jquery-3.6.1.min.js"
+      integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
+      crossorigin="anonymous"
+    ></script>
     <script
       src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js"
       crossorigin=""
@@ -85,6 +92,5 @@
     <script src="index.js"></script>
     <script src="http://localhost:3000/socket.io/socket.io.js"></script>
     <script src="socket/client.js"></script>
-    
   </body>
 </html>
