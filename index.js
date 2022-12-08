@@ -129,6 +129,20 @@ function printUsers() {
     </li>`;
   });
 }
+const userInformationsHtml = document.querySelector('.map__user__infos');
+
+function displayUserInformations() {
+  userInformationsHtml.innerHTML = '';
+
+  users.list.forEach((user) => {
+    userInformationsHtml.innerHTML += `<li>
+    <p id="map__user__name">${user.name}</p>
+    <p id="map__user__restaurant">Restaurant: BurgerKing</p>
+    <p id="map__user__remain">Restant: 10 min</p>
+  </li>
+    `;
+  });
+}
 
 printUsers();
 

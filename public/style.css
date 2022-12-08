@@ -354,9 +354,10 @@ body {
 }
 
 .map__user__infos {
+  display: none;
   position: absolute;
   z-index: 9997;
-  bottom: 0;
+  top: 0;
   right: 0;
   width: 26%;
 
