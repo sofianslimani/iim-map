@@ -118,7 +118,10 @@ function addUsers(users) {
 // REMOVE USER
 function removeUser(id) {
   const user = users.list.find((user) => user.id === id);
-  if (user) map.removeLayer(user.marker);
+  if (user) {
+    removeUserLines(user);
+    map.removeLayer(user.marker);
+  }
   users.list = users.list.filter((user) => user.id !== id);
   printUsers();
 }
@@ -168,13 +171,18 @@ function getDistance(A, B) {
   return (R * c) / 1000;
 }
 
+// REMOVE USER LINES
+function removeUserLines(user) {
+  user.lines.forEach((line) => {
+    line.remove();
+  });
+}
+
 // DRAW OR REDRAW LINES OF USER'S TRAJECT
 function updateTrajectLines(user) {
   const restaurant = restaurants[user.restaurant];
 
-  user.lines.forEach((line) => {
-    line.remove();
-  });
+  removeUserLines(user);
 
   user.lines = [];
 
