@@ -127,6 +127,8 @@
   $('#form__message').submit((event) => {
     event.preventDefault();
 
+    console.log('fzef');
+
     const message = $('#chat__message').val();
 
     const isCommand = message.charAt(0) === '/';

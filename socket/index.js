@@ -20,6 +20,7 @@ let rooms = [];
 
 function createRoom() {
   rooms.push({
+    miam: 13,
     users: [],
   });
 }

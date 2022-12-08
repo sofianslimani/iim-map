@@ -13,7 +13,6 @@
   </head>
   <body>
     <div class="container">
-
       <div id="rooms">
         <h2>Selection de la Room:</h2>
         <ul id="rooms__list"></ul>
@@ -25,13 +24,15 @@
           <h2>Connexion</h2>
         </div>
         <form action="" id="loginform" class="login__form">
-            <label for="name">Nom</label>
-            <input type="text" id="name" />
-            <label for="login__restaurant">Choisis ton restaurant</label>
-            <select id="login__restaurant"></select>
-            <input id="login__coords"type="hidden" value="">
-            <p id="login__position" onclick="toggleMapFullScreen(true)">Changer sa localisation</p>
-            <button type="submit">Connexion</button>
+          <label for="name">Nom</label>
+          <input type="text" id="name" />
+          <label for="login__restaurant">Choisis ton restaurant</label>
+          <select id="login__restaurant"></select>
+          <input id="login__coords" type="hidden" value="" />
+          <p id="login__position" onclick="toggleMapFullScreen(true)">
+            Changer sa localisation
+          </p>
+          <button type="submit">Connexion</button>
         </form>
       </div>
 
@@ -72,20 +73,9 @@
       </div>
 
       <div class="room">
-        <div class="room__head">
-          <div class="room__title">
-            <h2 id="room__name"></h2>
-            <button id="room__change">Changer</button>
-          </div>
-          <ul class="users__list"></ul>
-        </div>
-          <div class="room__chat__container">
-            <ul id="messages__box"></ul>
-            <form id="form__message" action="">
-              <input id="chat__message" autocomplete="off" />
-              <button type="submit" id="chat__submit">Envoyer</button>
-            </form>
-          </div>
+        <div class="room__title">
+          <h2 id="room__name"></h2>
+          <button id="room__change">Changer</button>
         </div>
 
         <div class="room__users__container">
