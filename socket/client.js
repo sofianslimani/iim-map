@@ -99,12 +99,11 @@
 
     const name = $('#name').val();
     const coords = $('#login__coords').val().split(';');
-    const errorHtml = document.querySelector('.map__error');
 
-    if (!name || !coords) return (errorHtml.innerHTML += `<p>test</p>`);
+    if (!name || !coords) return printError('Veuillez remplir tous les champs');
 
     if (users.list.find((user) => user.name === name))
-      return console.log('error: Ce nom est déjà utilisé');
+      return printError('Ce nom est déjà pris');
 
     const user = {
       id: users.list.length,
@@ -147,10 +146,12 @@
         (key) => key.toLowerCase() === params.function
       );
 
-      if (!functionName) return console.log('error: Commande introuvable');
+      if (!functionName) return printError('Commande inconnue');
 
       const error = chatCommands[functionName](params.value);
-      if (error) return console.log(`error: ${error}`);
+      if (error) return printError(error);
+
+      addMessage(`Commande "${functionName}" executée`);
 
       data = params;
     } else {
@@ -174,6 +175,30 @@
     if (selectedUserIndex !== -1)
       printMapInformations(getInformationsToLunch()[selectedUserIndex]);
   }
+
+  //ON RESTAURANT CLICK
+
+  function updateUserRestaurant(userId, restaurantId) {
+    const user = getUser(userId);
+
+    const userIndex = users.list.indexOf(user);
+
+    users.list[userIndex].restaurant = restaurantId;
+
+    updateTrajectLines(user);
+  }
+
+  const restaurantChildrenHtml =
+    document.querySelector('.restaurants__list').children;
+
+  Object.values(restaurantChildrenHtml).forEach((li) => {
+    li.addEventListener('click', (e) => {
+      const restaurantId = parseInt(li.dataset.restaurant);
+
+      updateUserRestaurant(ownerId, restaurantId);
+      socket.emit('updateUserRestaurant', ownerId, restaurantId, currentRoomId);
+    });
+  });
 
   socket.on('initData', (users, roomId) => {
     currentRoomId = roomId;
@@ -202,6 +227,7 @@
       (key) => key.toLowerCase() === params.function
     );
     chatCommands[functionName](params.value);
+    addMessage(`Commande "${functionName}" executée`);
   });
 
   socket.on('sendMessage', (message, roomId) => {
@@ -211,5 +237,10 @@
 
   socket.on('updateUserPosition', (id, position) => {
     updateUserPosition(id, position);
+  });
+
+  socket.on('updateUserRestaurant', (userId, restaurantId, roomId) => {
+    if (currentRoomId !== roomId) return;
+    updateUserRestaurant(userId, restaurantId);
   });
 })(jQuery);

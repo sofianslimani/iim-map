@@ -89,6 +89,15 @@ io.on('connection', (socket) => {
     removeUser(id, roomdId);
   });
 
+  socket.on('updateUserRestaurant', (userId, restaurantId, roomId) => {
+    const user = rooms[roomId].users.find((user) => user.id === userId);
+    const userIndex = rooms[roomId].users.indexOf(user);
+
+    rooms[roomId].users[userIndex].restaurant = restaurantId;
+
+    socket.broadcast.emit('updateUserRestaurant', userId, restaurantId, roomId);
+  });
+
   socket.on('disconnect', () => {
     if (data.roomId !== -1 && data.userId !== -1)
       removeUser(data.userId, data.roomId);

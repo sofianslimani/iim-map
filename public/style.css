@@ -125,6 +125,7 @@ body {
 }
 
 .restaurants {
+  height: 100vh;
   border-right: 1px solid #ccc;
 }
 
@@ -136,11 +137,11 @@ body {
 }
 
 .restaurants__list {
-  max-height: 100vh;
+  height: 100%;
   list-style: none;
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
+  overflow: auto;
   user-select: none;
 }
 
@@ -365,11 +366,27 @@ body {
   user-select: none;
 }
 .users__list__item {
+  position: relative;
   color: white;
   background-color: black;
   padding: 10px;
   border-radius: 5px;
   margin-top: 10px;
+}
+
+.users__list__item:not(.selected) svg {
+  display: none;
+}
+
+.users__list__item.selected svg {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translate(-50%, -50%);
+}
+
+.users__list__item.selected svg * {
+  fill: rgb(217, 217, 43);
 }
 
 .users__list__item.owner {
@@ -382,7 +399,7 @@ body {
 }
 
 .map__error {
-  display: none;
+  opacity: 0;
   position: absolute;
   z-index: 9999;
 
@@ -396,10 +413,8 @@ body {
   text-transform: uppercase;
 
   text-align: center;
-}
 
-.map__error.show {
-  display: block;
+  transition: all 0.5s ease;
 }
 
 .map__user__infos {
