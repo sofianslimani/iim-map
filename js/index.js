@@ -2,8 +2,6 @@ const lat = 48.89347;
 const lon = 2.232;
 let map = null;
 
-let lunchTime = null;
-
 let selectedUserIndex = -1;
 let ownerId = -1;
 
@@ -15,15 +13,6 @@ let chooseMapPosition = false;
 let leftTimeInterval = null;
 
 const lineColors = ['red', 'blue', 'black', 'green', 'yellow', 'orange'];
-
-// CHANGE MIAM HOUR
-function setMiam(value) {
-  lunchTime = new Date(new Date().setHours(parseInt(value), 0, 0));
-  if (selectedUserIndex !== -1)
-    printMapInformations(getInformationsToLunch()[selectedUserIndex]);
-}
-
-setMiam(13);
 
 const loginCoordsHtml = document.querySelector('#login__coords');
 
@@ -85,6 +74,11 @@ let arrival = {
   },
 };
 
+// GET ROOM MIAM HOUR
+function getMiam() {
+  return new Date(rooms[currentRoomId].miam);
+}
+
 // ADD USER
 function addUser(user, owner = false) {
   const newUser = {
@@ -124,7 +118,10 @@ function addUsers(users) {
 // REMOVE USER
 function removeUser(id) {
   const user = users.list.find((user) => user.id === id);
-  if (user) map.removeLayer(user.marker);
+  if (user) {
+    removeUserLines(user);
+    map.removeLayer(user.marker);
+  }
   users.list = users.list.filter((user) => user.id !== id);
   printUsers();
 }
@@ -174,13 +171,18 @@ function getDistance(A, B) {
   return (R * c) / 1000;
 }
 
+// REMOVE USER LINES
+function removeUserLines(user) {
+  user.lines.forEach((line) => {
+    line.remove();
+  });
+}
+
 // DRAW OR REDRAW LINES OF USER'S TRAJECT
 function updateTrajectLines(user) {
   const restaurant = restaurants[user.restaurant];
 
-  user.lines.forEach((line) => {
-    line.remove();
-  });
+  removeUserLines(user);
 
   user.lines = [];
 
@@ -231,7 +233,7 @@ function getInformationsToLunch(id = -1) {
       distance: getTrajectDistance(user),
       time: getTrajectTime(user),
       timeOut: new Date(
-        lunchTime.getTime() - 1000 * (60 * (getTrajectTime(user) * 100))
+        getMiam().getTime() - 1000 * (60 * (getTrajectTime(user) * 100))
       ),
     };
   }

@@ -20,7 +20,7 @@ let rooms = [];
 
 function createRoom() {
   rooms.push({
-    miam: 13,
+    miam: new Date(new Date().getTime() + +(1 * 60 * 60 * 1000)),
     users: [],
   });
 }
@@ -56,7 +56,7 @@ io.on('connection', (socket) => {
   socket.on('login', (user) => {
     rooms[data.roomId].users.push(user);
     data.userId = user.id;
-    socket.broadcast.emit('addUser', user);
+    socket.broadcast.emit('addUser', user, data.roomId);
   });
 
   socket.on('dragArrival', (position) => {
@@ -65,8 +65,13 @@ io.on('connection', (socket) => {
 
   socket.on('chat', (data, isCommand) => {
     isCommand
-      ? socket.broadcast.emit('sendCommand', data)
-      : socket.broadcast.emit('sendMessage', data);
+      ? socket.broadcast.emit('sendCommand', data, data.roomId)
+      : socket.broadcast.emit('sendMessage', data, data.roomId);
+  });
+
+  socket.on('setMiam', (value, roomId) => {
+    rooms[roomId].miam = new Date(new Date().setHours(parseInt(value), 0, 0));
+    socket.emit('initRooms', rooms);
   });
 
   socket.on('newUserPosition', (id, position) => {

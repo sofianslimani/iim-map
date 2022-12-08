@@ -59,6 +59,7 @@
     setMiam,
   };
 
+  // INIT DATA
   function initData() {
     toggleLoginPopup(true);
 
@@ -124,10 +125,9 @@
     leftTimeInterval = startLeftTimeInterval(5);
   });
 
+  // ON SEND CHAT MESSAGE
   $('#form__message').submit((event) => {
     event.preventDefault();
-
-    console.log('fzef');
 
     const message = $('#chat__message').val();
 
@@ -149,7 +149,8 @@
 
       if (!functionName) return console.log('error: Commande introuvable');
 
-      chatCommands[functionName](params.value);
+      const error = chatCommands[functionName](params.value);
+      if (error) return console.log(`error: ${error}`);
 
       data = params;
     } else {
@@ -162,6 +163,18 @@
     $('#chat__message').val('');
   });
 
+  // CHANGE MIAM HOUR
+  function setMiam(value) {
+    if (value < getMiam().getHours()) return 'Cette heure est déjà passée';
+
+    socket.emit('setMiam', value, currentRoomId);
+    rooms[currentRoomId].miam = new Date(
+      new Date().setHours(parseInt(value), 0, 0)
+    );
+    if (selectedUserIndex !== -1)
+      printMapInformations(getInformationsToLunch()[selectedUserIndex]);
+  }
+
   socket.on('initData', (users, roomId) => {
     currentRoomId = roomId;
     printRoomName();
@@ -171,8 +184,8 @@
     addUsers(users);
   });
 
-  socket.on('addUser', (user) => {
-    if (map) addUser(user);
+  socket.on('addUser', (user, roomId) => {
+    if (currentRoomId === roomId && map) addUser(user);
   });
 
   socket.on('removeUser', (userId, roomId) => {
@@ -183,14 +196,16 @@
     updateArrival(position, true);
   });
 
-  socket.on('sendCommand', (params) => {
+  socket.on('sendCommand', (params, roomId) => {
+    if (currentRoomId !== roomId) return;
     const functionName = Object.keys(chatCommands).find(
       (key) => key.toLowerCase() === params.function
     );
     chatCommands[functionName](params.value);
   });
 
-  socket.on('sendMessage', (message) => {
+  socket.on('sendMessage', (message, roomId) => {
+    if (currentRoomId !== roomId) return;
     addMessage(message);
   });
 
