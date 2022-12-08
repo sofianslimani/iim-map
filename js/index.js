@@ -105,6 +105,10 @@ function addUser(user, owner = false) {
 
   printUsers();
   updateTrajectLines(newUser);
+
+  addMessage(
+    `${user.id === ownerId ? `Vous avez` : `${user.name} a`} rejoint la salle`
+  );
 }
 
 //GET USER
@@ -130,6 +134,7 @@ function removeUser(id) {
   }
   users.list = users.list.filter((user) => user.id !== id);
   printUsers();
+  addMessage(`${user.name} a quitté la salle`);
 }
 
 // UPDATE USER MARKER POSITION
