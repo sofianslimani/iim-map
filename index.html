@@ -15,6 +15,12 @@
     
     <div class="container">
 
+      <div id="rooms">
+        <h2>Selection de la Room:</h2>
+        <ul id="rooms__list"></ul>
+        <button id="rooms__add">Ajouter une Room</button>
+      </div>
+
       <div id="login" class="login">
         <div class="login__title">
           <h2>Connexion</h2>
@@ -25,7 +31,7 @@
             <label for="login__restaurant">Choisis ton restaurant</label>
             <select id="login__restaurant"></select>
             <input id="login__coords"type="hidden" value="">
-            <p id="login__position" onclick="toggleMapFullScreen(true)">Placer son repère</p>
+            <p id="login__position" onclick="toggleMapFullScreen(true)">Changer sa localisation</p>
             <button type="submit">Connexion</button>
         </form>
 
@@ -60,8 +66,11 @@
       </div>
 
       <div class="room">
-        <div class="room__title">
-          <h2>Rooms</h2>
+        <div class="room__head">
+          <div class="room__title">
+            <h2 id="room__name"></h2>
+            <button id="room__change">Changer</button>
+          </div>
           <ul class="users__list"></ul>
         </div>
           <div class="room__chat__container">
@@ -82,7 +91,8 @@
       src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js"
       crossorigin=""
     ></script>
-    <script src="index.js"></script>
+    <script src="js/index.js"></script>
+    <script src="js/prints.js"></script>
     <script src="http://localhost:3000/socket.io/socket.io.js"></script>
     <script src="socket/client.js"></script>
     

@@ -15,6 +15,34 @@ body {
   display: flex;
 }
 
+#rooms {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: white;
+  z-index: 999999;
+}
+
+#rooms__list {
+  list-style: none;
+  width: 30%;
+}
+
+#rooms__list li {
+  background-color: black;
+  border-radius: 5px;
+  text-align: center;
+  padding: 10px;
+  color: white;
+}
+
+#rooms__list li:hover {
+  cursor: pointer;
+  background-color: rgb(35, 35, 35);
+}
+
 .login {
   position: absolute;
   top: 50%;
@@ -167,6 +195,16 @@ body {
   user-select: none;
 }
 
+.room__title {
+  display: flex;
+  width: 100%;
+  justify-content: space-evenly;
+}
+
+.room__title button:hover {
+  cursor: pointer;
+}
+
 .room__chat__container {
   position: absolute;
 
@@ -277,7 +315,7 @@ body {
 }
 
 #login__position {
-  background-color: black;
+  background-color: rgb(160, 30, 30);
   color: white;
   padding: 10px;
   margin-bottom: 10px;
@@ -286,7 +324,7 @@ body {
 }
 
 #login__position:hover {
-  background-color: rgb(38, 38, 38);
+  background-color: rgb(196, 22, 22);
   cursor: pointer;
   text-align: center;
 }
@@ -299,7 +337,15 @@ body {
   margin-top: 10px;
 }
 
+.users__list__item.owner {
+  color: rgb(217, 217, 43);
+}
+
 .users__list__item:hover {
   cursor: pointer;
   background-color: rgb(84, 84, 84);
+}
+
+.users__list__item.owner {
+  color: rgb(224, 224, 25);
 }
