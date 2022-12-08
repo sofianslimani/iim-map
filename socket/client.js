@@ -99,9 +99,9 @@
 
     const name = $('#name').val();
     const coords = $('#login__coords').val().split(';');
+    const errorHtml = document.querySelector('.map__error');
 
-    if (!name || !coords)
-      return console.log('error: Merci de remplir tous les champs');
+    if (!name || !coords) return (errorHtml.innerHTML += `<p>test</p>`);
 
     if (users.list.find((user) => user.name === name))
       return console.log('error: Ce nom est déjà utilisé');

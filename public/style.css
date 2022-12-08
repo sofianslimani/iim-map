@@ -15,6 +15,12 @@ body {
   display: flex;
 }
 
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+}
+
 #rooms {
   position: fixed;
   top: 0;
