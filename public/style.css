@@ -348,3 +348,19 @@ body {
 
   text-align: center;
 }
+
+.map__error.show {
+  display: block;
+}
+
+.map__user__infos {
+  position: absolute;
+  z-index: 9997;
+  bottom: 0;
+  right: 0;
+  width: 26%;
+
+  font-size: 16px;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 10px;
+}
