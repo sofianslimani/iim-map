@@ -71,7 +71,7 @@ const mapInformationsHtml = document.querySelector('#map__informations');
 function printMapInformations(data, index = -1) {
   if (index !== -1) selectedUserIndex = index;
 
-  mapInformationsHtml.innerHTML = `miam -> ${lunchTime.toLocaleDateString(
+  mapInformationsHtml.innerHTML = `miam -> ${getMiam().toLocaleDateString(
     'fr-fr',
     {
       day: 'numeric',
