@@ -104,6 +104,7 @@ function addUser(user, owner = false) {
   }
 
   printUsers();
+  updateTrajectLines(newUser);
 }
 
 // ADD USERS
