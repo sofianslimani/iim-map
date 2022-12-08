@@ -107,6 +107,11 @@ function addUser(user, owner = false) {
   updateTrajectLines(newUser);
 }
 
+//GET USER
+function getUser(id) {
+  return users.list.find((user) => user.id === id);
+}
+
 // ADD USERS
 function addUsers(users) {
   users.forEach((user) => {
@@ -290,8 +295,6 @@ function startLeftTimeInterval(time = 60, socket = null) {
   if (leftTimeInterval) clearInterval(leftTimeInterval);
 
   return setInterval(() => {
-    const currentDate = new Date();
-
     // UPDATE OWNER LOCATION
     map
       .locate({
@@ -303,14 +306,6 @@ function startLeftTimeInterval(time = 60, socket = null) {
       });
 
     // UPDATE INFORMATIONS SELECTED USER POPUP
-    const time = Math.round(getInformationsToLunch(ownerId).time * 100);
-    const user = users.list.find(
-      (user) =>
-        user.id === (selectedUserIndex !== -1 ? selectedUserIndex : ownerId)
-    );
-    const restaurant = restaurants[user.restaurant];
-    console.log(
-      `${user.name} => Il reste ${time} minutes pour ${restaurant.name}`
-    );
+    printMapInformationsget(InformationsToLunch(ownerId));
   }, time * 1000);
 }
