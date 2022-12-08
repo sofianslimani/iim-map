@@ -63,10 +63,10 @@ io.on('connection', (socket) => {
     socket.broadcast.emit('updateArrival', position);
   });
 
-  socket.on('chat', (data, isCommand) => {
+  socket.on('chat', (values, isCommand) => {
     isCommand
-      ? socket.broadcast.emit('sendCommand', data, data.roomId)
-      : socket.broadcast.emit('sendMessage', data, data.roomId);
+      ? socket.broadcast.emit('sendCommand', values, data.roomId)
+      : socket.broadcast.emit('sendMessage', values, data.roomId);
   });
 
   socket.on('setMiam', (value, roomId) => {

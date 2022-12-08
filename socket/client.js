@@ -135,6 +135,8 @@
 
     let data = null;
 
+    const user = users.list.find((user) => user.id === ownerId);
+
     if (isCommand) {
       const command = message.substring(1);
       const args = command.split(' ');
@@ -155,10 +157,17 @@
       data = params;
     } else {
       data = message;
-      addMessage(message);
+      addMessage(`${user.name}: ${message}`);
     }
 
-    socket.emit('chat', data, isCommand);
+    socket.emit(
+      'chat',
+      {
+        userName: user.name,
+        data,
+      },
+      isCommand
+    );
 
     $('#chat__message').val('');
   });
@@ -196,17 +205,18 @@
     updateArrival(position, true);
   });
 
-  socket.on('sendCommand', (params, roomId) => {
+  socket.on('sendCommand', (values, roomId) => {
     if (currentRoomId !== roomId) return;
     const functionName = Object.keys(chatCommands).find(
-      (key) => key.toLowerCase() === params.function
+      (key) => key.toLowerCase() === values.data.function
     );
-    chatCommands[functionName](params.value);
+    chatCommands[functionName](values.data.value);
   });
 
-  socket.on('sendMessage', (message, roomId) => {
+  socket.on('sendMessage', (values, roomId) => {
+    console.log(currentRoomId, roomId);
     if (currentRoomId !== roomId) return;
-    addMessage(message);
+    addMessage(`${values.userName}: ${values.data}`);
   });
 
   socket.on('updateUserPosition', (id, position) => {
